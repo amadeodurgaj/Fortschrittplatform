@@ -128,7 +128,7 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 500px;
+    max-width: 350px;
 }
 
 .hero-image img {
