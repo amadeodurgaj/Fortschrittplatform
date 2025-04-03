@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produktivitäts-Game</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -27,6 +28,12 @@
     <button id="loginBtn">Anmelden</button>
     <button id="registerBtn" class="highlight-btn">Registrieren</button>
   </div>
+  <br>
+  <div id="userDisplay" style="display: none;">
+    <span id="userGreeting"></span>
+    <button id="logoutBtn" class="btn btn-danger">Logout</button>
+  </div>
+
 </header>
 
 <!-- Hauptinhalt - Startseite -->
@@ -41,6 +48,11 @@
     <div class="hero-image">
       <img src=img/logo.png alt="Gamifizierte Produktivität">
     </div>
+  </section>
+
+  <!-- Willkommensnachricht für eingeloggte Benutzer -->
+  <section id="welcomeSection" class="welcome-message" style="display: none;">
+    <h2 id="welcomeMessage"></h2>
   </section>
 
   <!-- Funktionen -->
@@ -198,6 +210,16 @@
   </div>
 </footer>
 
+<script>
+  // Begrüßung anzeigen, falls ein Benutzer eingeloggt ist (nur temporär für Hardcoded-Login)
+  const loggedInUser = sessionStorage.getItem('loggedInUser');
+  if (loggedInUser) {
+    const welcomeSection = document.getElementById('welcomeSection');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    welcomeMessage.textContent = `Willkommen zurück, ${loggedInUser}!`;
+    welcomeSection.style.display = 'block';
+  }
+</script>
 <script src="script.js"></script>
 </body>
 </html>

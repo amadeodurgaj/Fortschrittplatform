@@ -8,6 +8,13 @@ const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const forgotPassword = document.getElementById('forgotPassword');
 const ctaButton = document.querySelector('.cta-button');
+const userMenu = document.querySelector('.user-menu');
+
+// Hartcodierte Benutzer für den Login
+const mockUsers = [
+    { email: 'test@example.com', password: '123456', username: 'Max' },
+    { email: 'admin@example.com', password: 'adminpass', username: 'Admin' }
+];
 
 // Event-Listener für Modals
 loginBtn.addEventListener('click', () => {
@@ -45,12 +52,17 @@ loginForm.addEventListener('submit', (e) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
-    // Hier später die Authentifizierungslogik einbauen
-    console.log('Login-Versuch mit:', email, password);
+    // Benutzer prüfen (Mock-Login)
+    const user = mockUsers.find(u => u.email === email && u.password === password);
 
-    // Mock-Login für die Entwicklung (später entfernen)
-    alert('Login erfolgreich! Diese Funktion wird später implementiert.');
-    loginModal.style.display = 'none';
+    if (user) {
+        alert(`Willkommen, ${user.username}!`);
+        sessionStorage.setItem('loggedInUser', user.username);
+        loginModal.style.display = 'none';
+        updateUserDisplay(); // Benutzeranzeige aktualisieren nach erfolgreichem Login
+    } else {
+        alert('Ungültige E-Mail oder Passwort!');
+    }
 });
 
 registerForm.addEventListener('submit', (e) => {
@@ -66,10 +78,10 @@ registerForm.addEventListener('submit', (e) => {
         return;
     }
 
-    // Hier später die Registrierungslogik einbauen
-    console.log('Registrierungsversuch mit:', username, email, password);
+    // Mock-Registrierung: Benutzer zu mockUsers hinzufügen
+    mockUsers.push({ username, email, password });
 
-    // Mock-Registrierung für die Entwicklung (später entfernen)
+    // Benutzer wurde erfolgreich registriert (temporär, nur im RAM)
     alert('Registrierung erfolgreich! Diese Funktion wird später implementiert.');
     registerModal.style.display = 'none';
 });
@@ -143,3 +155,41 @@ function getFromLocalStorage(key) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
 }
+
+// Benutzeranzeige im Header
+const userDisplay = document.getElementById('userDisplay');
+const userGreeting = document.getElementById('userGreeting');
+const logoutBtn = document.getElementById('logoutBtn');
+
+function updateUserDisplay() {
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+        // Benutzer ist eingeloggt
+        userGreeting.textContent = `Eingeloggt als: ${loggedInUser}`;
+        userDisplay.style.display = 'block';
+        userMenu.style.display = 'none'; // Login- und Registrierungsbuttons ausblenden
+
+        // Willkommensnachricht anzeigen
+        const welcomeSection = document.getElementById('welcomeSection');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        welcomeMessage.textContent = `Willkommen zurück, ${loggedInUser}!`;
+        welcomeSection.style.display = 'block';
+    } else {
+        // Benutzer ist nicht eingeloggt
+        userDisplay.style.display = 'none';
+        userMenu.style.display = 'flex'; // Login- und Registrierungsbuttons anzeigen
+
+        // Willkommensnachricht ausblenden
+        const welcomeSection = document.getElementById('welcomeSection');
+        welcomeSection.style.display = 'none';
+    }
+}
+
+logoutBtn.addEventListener('click', () => {
+    sessionStorage.removeItem('loggedInUser');
+    updateUserDisplay();
+    alert('Erfolgreich ausgeloggt.');
+});
+
+// Beim Laden der Seite Benutzeranzeige aktualisieren
+updateUserDisplay();
